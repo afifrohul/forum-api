@@ -2,6 +2,7 @@ import response from "../../../../Commons/utils/response.js";
 import AddThreadUseCase from "../../../../Applications/use_case/threads/AddThreadUseCase.js";
 import GetDetailThreadUseCase from "../../../../Applications/use_case/threads/GetDetailThreadUseCase.js";
 import AddCommentUseCase from "../../../../Applications/use_case/threads/AddCommentUseCase.js";
+import AddCommentReplyUseCase from "../../../../Applications/use_case/threads/AddCommentReplyUseCase.js";
 import DeleteCommentUseCase from "../../../../Applications/use_case/threads/DeleteCommentUseCase.js";
 class ThreadsController {
   constructor(container) {
@@ -10,6 +11,7 @@ class ThreadsController {
     this.postThread = this.postThread.bind(this);
     this.postComment = this.postComment.bind(this);
     this.getDetailThread = this.getDetailThread.bind(this);
+    this.postCommentReply = this.postCommentReply.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
   }
 
@@ -48,6 +50,25 @@ class ThreadsController {
     const addedComment = await addCommentUseCase.execute(payload);
 
     return response(res, 201, "Komentar berhasil dibuat", { addedComment });
+  }
+
+  async postCommentReply(req, res) {
+    const { threadId, commentId } = req.params;
+    const { id: user_id } = req.user;
+    const payload = {
+      ...req.body,
+      user_id,
+      thread_id: threadId,
+      comment_id: commentId,
+    };
+
+    const addCommentReplyUseCase = this._container.getInstance(
+      AddCommentReplyUseCase.name,
+    );
+
+    const addedReply = await addCommentReplyUseCase.execute(payload);
+
+    return response(res, 201, "Komentar berhasil dibuat", { addedReply });
   }
 
   async deleteComment(req, res) {
