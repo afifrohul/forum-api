@@ -421,4 +421,64 @@ describe("ThreadRepositoryPostgres", () => {
       expect(deletedCommentDb.deleted_at).not.toBeNull();
     });
   });
+  describe("deleteCommentReply function", () => {
+    it("should soft delete comment reply correctly", async () => {
+      await UsersTableTestHelper.addUser({
+        id: "user-123",
+        username: "dicoding-123",
+      });
+
+      const addThread = {
+        title: "Judul Thread",
+        body: "Isi thread",
+        user_id: "user-123",
+      };
+
+      const addComment = {
+        content: "Ini komen",
+        user_id: "user-123",
+        thread_id: "thread-123",
+      };
+
+      const addCommentReply = {
+        content: "Ini komen balasan",
+        comment_id: "comment-123",
+        user_id: "user-123",
+        thread_id: "thread-123",
+      };
+
+      const fakeIdGenerator = () => "123";
+      const fakeIdGenerator2 = () => "456";
+      const threadRepositoryPostgres = new ThreadRepositoryPostgres(
+        pool,
+        fakeIdGenerator,
+      );
+      const threadRepositoryPostgres2 = new ThreadRepositoryPostgres(
+        pool,
+        fakeIdGenerator2,
+      );
+
+      // Action
+      const addedThread = await threadRepositoryPostgres.addThread(addThread);
+      const addedComment =
+        await threadRepositoryPostgres.addComment(addComment);
+      const addedCommentReply =
+        await threadRepositoryPostgres2.addCommentReply(addCommentReply);
+
+      const deletedCommentReply =
+        await threadRepositoryPostgres.deleteCommentReply("comment-456");
+
+      const deletedCommentReplyDb =
+        await threadRepositoryPostgres.getCommentById("comment-456");
+
+      // Assert
+      expect(deletedCommentReply.id).toEqual("comment-456");
+
+      expect(deletedCommentReplyDb.id).toEqual("comment-456");
+      expect(deletedCommentReplyDb.content).toEqual(
+        "**balasan telah dihapus**",
+      );
+      expect(deletedCommentReplyDb.deleted_at).not.toBeNull();
+    });
+  });
 });

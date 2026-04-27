@@ -4,6 +4,7 @@ import GetDetailThreadUseCase from "../../../../Applications/use_case/threads/Ge
 import AddCommentUseCase from "../../../../Applications/use_case/threads/AddCommentUseCase.js";
 import AddCommentReplyUseCase from "../../../../Applications/use_case/threads/AddCommentReplyUseCase.js";
 import DeleteCommentUseCase from "../../../../Applications/use_case/threads/DeleteCommentUseCase.js";
+import DeleteCommentReplyUseCase from "../../../../Applications/use_case/threads/DeleteCommentReplyUseCase.js";
 class ThreadsController {
   constructor(container) {
     this._container = container;
@@ -13,6 +14,7 @@ class ThreadsController {
     this.getDetailThread = this.getDetailThread.bind(this);
     this.postCommentReply = this.postCommentReply.bind(this);
     this.deleteComment = this.deleteComment.bind(this);
+    this.deleteCommentReply = this.deleteCommentReply.bind(this);
   }
 
   async postThread(req, res) {
@@ -81,6 +83,20 @@ class ThreadsController {
     );
 
     const deletedComment = await deleteCommentUseCase.execute(payload);
+
+    return response(res, 200, "Komentar berhasil dihapus", { deletedComment });
+  }
+
+  async deleteCommentReply(req, res) {
+    const { replyId } = req.params;
+    const { id: user_id } = req.user;
+    const payload = { user_id, comment_id: replyId };
+
+    const deleteCommentReplyUseCase = this._container.getInstance(
+      DeleteCommentReplyUseCase.name,
+    );
+
+    const deletedComment = await deleteCommentReplyUseCase.execute(payload);
 
     return response(res, 200, "Komentar berhasil dihapus", { deletedComment });
   }

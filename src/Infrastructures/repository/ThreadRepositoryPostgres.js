@@ -185,6 +185,24 @@ class ThreadRepositoryPostgres extends ThreadRepository {
     const result = await this._pool.query(query);
     return result.rows[0];
   }
+
+  async deleteCommentReply(comment_id) {
+    const deletedAt = new Date().toISOString();
+
+    const query = {
+      text: `
+      UPDATE comments
+      SET content = $2,
+          deleted_at = $3
+      WHERE id = $1
+      RETURNING id
+    `,
+      values: [comment_id, "**balasan telah dihapus**", deletedAt],
+    };
+
+    const result = await this._pool.query(query);
+    return result.rows[0];
+  }
 }
 
 export default ThreadRepositoryPostgres;

@@ -21,6 +21,11 @@ const routes = (controller, container) => {
     authenticateToken(container),
     controller.deleteComment,
   );
+  router.delete(
+    "/:threadId/comments/:commentId/replies/:replyId",
+    authenticateToken(container),
+    controller.deleteCommentReply,
+  );
 
   return router;
 };

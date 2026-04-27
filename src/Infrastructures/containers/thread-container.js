@@ -7,6 +7,7 @@ import AddCommentReplyUseCase from "../../Applications/use_case/threads/AddComme
 import pool from "../database/postgres/pool.js";
 import { nanoid } from "nanoid";
 import DeleteCommentUseCase from "../../Applications/use_case/threads/DeleteCommentUseCase.js";
+import DeleteCommentReplyUseCase from "../../Applications/use_case/threads/DeleteCommentReplyUseCase.js";
 
 const threadsContainer = (container) => {
   container.register([
@@ -63,6 +64,16 @@ const threadsContainer = (container) => {
     {
       key: DeleteCommentUseCase.name,
       Class: DeleteCommentUseCase,
+      parameter: {
+        injectType: "destructuring",
+        dependencies: [
+          { name: "threadRepository", internal: ThreadRepository.name },
+        ],
+      },
+    },
+    {
+      key: DeleteCommentReplyUseCase.name,
+      Class: DeleteCommentReplyUseCase,
       parameter: {
         injectType: "destructuring",
         dependencies: [

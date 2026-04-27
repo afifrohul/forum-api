@@ -24,5 +24,8 @@ describe("ThreadRepository interace", () => {
     await expect(threadRepository.deleteComment("")).rejects.toThrowError(
       "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED",
     );
+    await expect(threadRepository.deleteCommentReply("")).rejects.toThrowError(
+      "THREAD_REPOSITORY.METHOD_NOT_IMPLEMENTED",
+    );
   });
 });
