@@ -18,8 +18,23 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: ${{ secrets.SSH_PORT }}
           script: |
+            # Load Linuxbrew / Homebrew path
+            export PATH=/home/linuxbrew/.linuxbrew/bin:$PATH
+            eval "$(/home/linuxbrew/.linuxbrew/bin/brew shellenv)"
+
             cd ~/forum-api
+
+            # Update source code
             git pull origin main
+
+            # Install production dependencies
             npm ci --omit=dev --no-audit --no-fund
+
+            # Run database migration
             npm run migrate up
+
+            # Restart application
             pm2 restart forum-api
+
+            # Save PM2 process list
+            pm2 save
