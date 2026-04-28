@@ -6,6 +6,7 @@ node_modules/
 
 # environment
 .env*
+.test.env
 
 # build
 dist/
