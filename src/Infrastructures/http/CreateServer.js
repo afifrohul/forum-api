@@ -14,6 +14,7 @@ const createServer = async (container) => {
     return res.json({
       status: "success",
       message: "Backend server successfully running!",
+      data: "Hello world!"
     });
   });
 
