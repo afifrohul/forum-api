@@ -1,6 +1,9 @@
 # dependencies
 node_modules/
 
+# key
+*.pem
+
 # environment
 .env*
 

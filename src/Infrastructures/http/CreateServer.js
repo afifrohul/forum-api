@@ -10,6 +10,13 @@ const createServer = async (container) => {
 
   app.use(express.json());
 
+  app.get("/", (req, res) => {
+    return res.json({
+      status: "success",
+      message: "Backend server successfully running!",
+    });
+  });
+
   app.use("/users", users(container));
   app.use("/authentications", authentications(container));
   app.use("/threads", threads(container));
