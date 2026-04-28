@@ -5,15 +5,17 @@ node_modules/
 *.pem
 
 # environment
-.env*
+.env
+.env.*
 .test.env
+*.env.local
 
 # build
 dist/
 build/
 
 # logs
-logs
+logs/
 *.log
 npm-debug.log*
 
