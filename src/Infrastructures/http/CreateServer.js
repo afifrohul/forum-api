@@ -13,7 +13,7 @@ const createServer = async (container) => {
   app.get("/", (req, res) => {
     return res.json({
       status: "success",
-      message: "Backend server successfully running. Ready to accept requests!",
+      message: "Backend API server successfully running. Ready to accept requests!",
       data: "Hello world!",
     });
   });
